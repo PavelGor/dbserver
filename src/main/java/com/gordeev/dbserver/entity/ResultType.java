@@ -9,12 +9,4 @@ public enum ResultType {
         this.type = type;
     }
 
-    public static ResultType getByName(String type) {
-        for(ResultType resultType : values()){
-            if (resultType.type.equalsIgnoreCase(type)){
-                return resultType;
-            }
-        }
-        throw new IllegalArgumentException("No result type with type " + type + " found");
-    }
 }

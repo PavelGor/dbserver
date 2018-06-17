@@ -1,0 +1,12 @@
+{
+  "type" : "CREATE_TABLE",
+  "dbName" : "test2db",
+  "tableName" : "test2table",
+  "columns" :
+    {
+    "id":"int",
+    "firstName":"String",
+    "lastName":"String",
+    "salary":"double"
+    }
+}

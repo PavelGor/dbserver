@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<test3table>
+<column type="String">name</column>
+<column type="int">id</column>
+<column type="double">salary</column>
+</test3table>

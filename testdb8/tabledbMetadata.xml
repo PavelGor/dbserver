@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<tabledb>
+    <columns>
+        <column type="int">id</column>
+        <column type="String">name</column>
+        <column type="double">salary</column>
+    </columns>
+</tabledb>

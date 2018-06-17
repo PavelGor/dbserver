@@ -1,0 +1,14 @@
+<Result>
+    <resultType>RESULTSET</resultType>
+    <message>all rows</message>
+    <columns>
+        <columns>id</columns>
+        <columns>name</columns>
+    </columns>
+    <rows>
+        <rows>1</rows>
+        <rows>name1</rows>
+        <rows>2</rows>
+        <rows>name2</rows>
+    </rows>
+</Result>

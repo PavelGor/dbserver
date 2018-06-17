@@ -1,0 +1,33 @@
+{
+  "login" : "root",
+  "password" : "root",
+  "type" : "create table",
+  "dbName" : "test2db",
+  "tableName" : "test2table",
+  "columns" : {
+    "id":"int",
+    "firstName":"String",
+    "lastName":"String",
+    "salary":"double"
+  },
+  "values" : [
+    {
+      "id":1,
+      "firstName":"Roman",
+      "lastName":"Frantzevich",
+      "salary":13.89
+    },
+    {
+      "id":2,
+      "firstName":"Pavel",
+      "lastName":"Kusturitsa",
+      "salary":17.45
+    },
+    {
+      "id":3,
+      "firstName":"Tolik",
+      "lastName":"Tolikovich",
+      "salary":654
+    }
+  ]
+}

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<test2table>
+<column type="int">id</column>
+<column type="String">firstName</column>
+<column type="String">lastName</column>
+<column type="double">salary</column>
+</test2table>

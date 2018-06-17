@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<testtable>
+    <values>
+        <value>
+            <id>1</id>
+            <name>pavel</name>
+            <salary>195</salary>
+        </value>
+        <value>
+            <id>2</id>
+            <name>tolik</name>
+            <salary>245</salary>
+        </value>
+        <value>
+            <id>3</id>
+            <name>katja</name>
+            <salary>318</salary>
+        </value>
+    </values>
+</testtable>

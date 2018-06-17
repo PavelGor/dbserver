@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<resultSet>
+    <resultType>SELECT</resultType>
+    <message>additional info</message>
+    <columns>
+        <column type="int">id</column>
+        <column type="String">name</column>
+        <column type="double">salary</column>
+    </columns>
+    <values>
+        <value>
+            <id>1</id>
+            <name>pavel</name>
+            <salary>195</salary>
+        </value>
+        <value>
+            <id>2</id>
+            <name>tolik</name>
+            <salary>245</salary>
+        </value>
+        <value>
+            <id>3</id>
+            <name>katja</name>
+            <salary>318</salary>
+        </value>
+    </values>
+</resultSet>
