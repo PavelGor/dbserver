@@ -16,6 +16,7 @@ import javax.xml.transform.*;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -25,7 +26,7 @@ import java.util.Map;
 public class DbHandler {
     private final static DocumentBuilderFactory DOCUMENT_BUILDER_FACTORY = DocumentBuilderFactory.newInstance();
     private final static TransformerFactory TRANSFORMER_FACTORY = TransformerFactory.newInstance();
-    private static final Logger LOG = LoggerFactory.getLogger(DbHandler.class);
+    private final static Logger LOG = LoggerFactory.getLogger(DbHandler.class);
 
     public synchronized Result executeQuery(Query query) {
 
@@ -55,7 +56,7 @@ public class DbHandler {
             return insert(query);
         }
 
-        return new Result(ResultType.ERROR, "Type of Query is not allowed here (Allowed: SELECT, CREATE DATABASE, CREATE TABLE)");
+        return new Result(ResultType.ERROR, "Type of Query is not allowed here (Allowed: SELECT, CREATE DATABASE, CREATE TABLE, UPDATE, DELETE)");
     }
 
     private Result createDatabase(Query query) {
@@ -98,21 +99,15 @@ public class DbHandler {
                         column.appendChild(textNode);
                         columnsElement.appendChild(column);
                     }
-
                     doc.appendChild(rootElement);
 
-                    Transformer t = TRANSFORMER_FACTORY.newTransformer();
-                    t.setOutputProperty(OutputKeys.INDENT, "yes");
-                    FileOutputStream fileOutputStream = new FileOutputStream(tableMetadata);
-                    t.transform(new DOMSource(doc), new StreamResult(fileOutputStream));
+                    saveXmlToFile_Db(doc, tableMetadata);
 
                     result.setResultType(ResultType.UPDATED);
                     result.setMessage("Table" + query.getTableName() + " was created successfully");
                     LOG.info("Table was created successfully: {}", query.getTableName());
-                    fileOutputStream.close();
                 }
-            } catch (Exception e) {
-                e.printStackTrace();
+            } catch (TransformerException | IOException | ParserConfigurationException e) {
                 result.setResultType(ResultType.ERROR);
                 result.setMessage("Cannot create table: " + query.getTableName());
                 LOG.info("Cannot create table: {}", query.getTableName());
@@ -135,7 +130,6 @@ public class DbHandler {
                 result = readData(result, table);
                 LOG.info("Data was read by SELECT query to object: {}", result);
             } catch (ParserConfigurationException | IOException | SAXException e) {
-                e.printStackTrace();
                 result.setResultType(ResultType.ERROR);
                 result.setMessage("Something wrong with tables");
                 LOG.info("Cannot read data by SELECT query: {}", e);
@@ -196,18 +190,12 @@ public class DbHandler {
                     }
                 }
 
-                //push changes to file/DB
-                Transformer t = TRANSFORMER_FACTORY.newTransformer();
-                t.setOutputProperty(OutputKeys.INDENT, "yes");
-                FileOutputStream fileOutputStream = new FileOutputStream(table);
-                t.transform(new DOMSource(docData), new StreamResult(fileOutputStream));
+                saveXmlToFile_Db(docData, table);
 
                 result.setResultType(ResultType.UPDATED);
                 result.setMessage("Table was updated successfully");
                 LOG.info("DELETE: Table was updated successfully");
-                fileOutputStream.close();
-            } catch (Exception e) {
-                e.printStackTrace();
+            } catch (TransformerException | IOException | SAXException | ParserConfigurationException e) {
                 result.setResultType(ResultType.ERROR);
                 result.setMessage("Something wrong with deleting data");
                 LOG.info("DELETE: Something wrong with deleting data");
@@ -273,18 +261,12 @@ public class DbHandler {
                     }
                 }
 
-                //push changes to file/DB
-                Transformer t = TRANSFORMER_FACTORY.newTransformer();
-                t.setOutputProperty(OutputKeys.INDENT, "yes");
-                FileOutputStream fileOutputStream = new FileOutputStream(table);
-                t.transform(new DOMSource(docData), new StreamResult(fileOutputStream));
+                saveXmlToFile_Db(docData, table);
 
                 result.setResultType(ResultType.UPDATED);
                 result.setMessage("Table was updated successfully");
                 LOG.info("UPDATE: Table was updated successfully");
-                fileOutputStream.close();
-            } catch (Exception e) {
-                e.printStackTrace();
+            } catch (TransformerException | IOException | SAXException | ParserConfigurationException e) {
                 result.setResultType(ResultType.ERROR);
                 result.setMessage("Something wrong with table updation");
                 LOG.info("UPDATE: Something wrong with table updation");
@@ -340,18 +322,12 @@ public class DbHandler {
 
                 docData.getFirstChild().appendChild(insertRowNode); //TODO: insert Node down 1 level
 
-                //push changes to file/DB
-                Transformer t = TRANSFORMER_FACTORY.newTransformer();
-                t.setOutputProperty(OutputKeys.INDENT, "yes");
-                FileOutputStream fileOutputStream = new FileOutputStream(table);
-                t.transform(new DOMSource(docData), new StreamResult(fileOutputStream));
+                saveXmlToFile_Db(docData, table);
 
                 result.setResultType(ResultType.UPDATED);
                 result.setMessage("Table was updated successfully");
                 LOG.info("INSERT: Table was updated successfully");
-                fileOutputStream.close();
-            } catch (Exception e) {
-                e.printStackTrace();
+            } catch (TransformerException | IOException | SAXException | ParserConfigurationException e) {
                 result.setResultType(ResultType.ERROR);
                 result.setMessage("Something wrong with table updation");
                 LOG.info("INSERT: Something wrong with table updation");
@@ -383,7 +359,6 @@ public class DbHandler {
     }
 
     private Result readData(Result result, File table) throws IOException, SAXException, ParserConfigurationException {
-
         DocumentBuilder build = DOCUMENT_BUILDER_FACTORY.newDocumentBuilder();
         Document doc = build.parse(table);
 
@@ -405,5 +380,13 @@ public class DbHandler {
             result.getRows().add(row);
         }
         return result;
+    }
+
+    private void saveXmlToFile_Db(Document doc, File file) throws TransformerException, IOException {
+        Transformer t = TRANSFORMER_FACTORY.newTransformer();
+        t.setOutputProperty(OutputKeys.INDENT, "yes");
+        FileOutputStream fileOutputStream = new FileOutputStream(file);
+        t.transform(new DOMSource(doc), new StreamResult(fileOutputStream));
+        fileOutputStream.close();
     }
 }

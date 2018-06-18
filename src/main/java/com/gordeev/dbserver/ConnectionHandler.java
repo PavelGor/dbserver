@@ -24,7 +24,6 @@ public class ConnectionHandler implements Runnable {
 
             Query query = queryReader.readQuery();
             query.setValid(true); //TODO:validate query later
-            LOG.info("Received request-query from client: {}", query);
 
             while (query != null) {
                 if (!query.isValid()) {
@@ -33,12 +32,10 @@ public class ConnectionHandler implements Runnable {
                 }
                 Result result = DB_HANDLER.executeQuery(query);
                 resultWriter.write(result);
-                LOG.info("Result of query was send to user: {}", result);
                 query = queryReader.readQuery();
-                LOG.info("Received new query from client: {}", query);
             }
         } catch (Exception e) {
-            LOG.info("Something wrong with this client: {}", e);
+            LOG.info("Something wrong with client connection: {}", e);
         }
     }
 
